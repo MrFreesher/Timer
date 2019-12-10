@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_set_timer.*
  * A simple [Fragment] subclass.
  */
 class SetTimerFragment : Fragment() {
-
+    var time = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,14 +29,42 @@ class SetTimerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.title = "Setup timer"
-        timeTextView.setText(TimerUtils.getCorrectTimerString(320))
-        Log.e("MyActivity",TimerUtils.getCorrectTimerString(320))
+        timeTextView.text = TimerUtils.getCorrectTimerString(time)
+        Log.e("MyActivity",TimerUtils.getCorrectTimerString(time))
         startBtn.setOnClickListener {
             val action = SetTimerFragmentDirections.actionSetTimerFragmentToTimerFragment()
-            action.time = 2000
+            action.time = time
             findNavController(this).navigate(action)
         }
-    }
+        plusOneMinBtn.setOnClickListener {
+            if((time+60)<3600 && time<3600) {
+              increaseTime(60)
+            }
+        }
+        minusOneMinBtn.setOnClickListener{
+            if((time-60)>-1){
+                decreaseTime(60)
+            }
+        }
+        plusSecondsBtn.setOnClickListener{
+            if((time+60)<3600 || time<3600) {
+              increaseTime(15)
+            }
+        }
+        minutSecondsBtn.setOnClickListener {
+            if((time-15)>-1){
+                decreaseTime(15)
+            }
+        }
 
+    }
+    fun decreaseTime(value:Int){
+        time-=value
+        timeTextView.text = TimerUtils.getCorrectTimerString(time)
+    }
+    fun increaseTime(value:Int){
+        time+=value
+        timeTextView.text = TimerUtils.getCorrectTimerString(time)
+    }
 
 }
